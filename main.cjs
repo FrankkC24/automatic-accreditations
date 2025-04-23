@@ -4,7 +4,6 @@ const path = require('path');
 let mainWindow;
 
 app.whenReady().then(async () => {
-  // Crear la ventana principal
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -30,7 +29,6 @@ app.whenReady().then(async () => {
     mainWindow.webContents.openDevTools();
   }
 
-  // Importar dinámicamente el módulo ES y pasar la ventana
   try {
     const module = await import('./src/main/index.js');
     if (module.initialize) {
@@ -42,7 +40,6 @@ app.whenReady().then(async () => {
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      // Crear una nueva ventana si no hay ninguna (comportamiento de macOS)
       createWindow();
     }
   });
@@ -54,7 +51,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-// Función para crear una nueva ventana si es necesario
 async function createWindow() {
   try {
     const module = await import('./src/main/index.js');
