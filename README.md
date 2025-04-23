@@ -32,7 +32,7 @@ Clone the repository and install dependencies:
 ```bash
 # Clone the repository
 git clone https://github.com/FrankkC24/automatic-accreditations.git
-cd acreditaciones-app
+cd automatic-accreditations
 
 # Install dependencies using pnpm (recommended)
 pnpm install
