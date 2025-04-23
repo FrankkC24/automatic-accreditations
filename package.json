@@ -1,5 +1,5 @@
 {
-  "name": "acreditaciones-app",
+  "name": "acreditaciones-automaticas",
   "version": "1.0.0",
   "description": "Aplicación para generar archivos de acreditaciones automáticas",
   "main": "main.cjs",
