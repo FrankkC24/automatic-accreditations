@@ -1,0 +1,62 @@
+{
+  "name": "acreditaciones-app",
+  "version": "1.0.0",
+  "description": "Aplicación para generar archivos de acreditaciones automáticas",
+  "main": "main.cjs",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable",
+    "dev": "nodemon --exec \"electron .\" --ext js,json"
+  },
+  "author": "FrankkC24",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/yauzl": "^2.10.3",
+    "electron": "^21.4.4",
+    "electron-builder": "^26.0.12",
+    "nodemon": "^3.1.9"
+  },
+  "build": {
+    "appId": "com.acreditaciones.app",
+    "productName": "Acreditaciones Automáticas",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "src/renderer/assets/icon.ico"
+    },
+    "portable": {
+      "artifactName": "AcreditacionesAutomaticas.exe"
+    }
+  },
+  "asar": true,
+  "compression": "maximum",
+  "dependencies": {
+    "electron-store": "^10.0.1",
+    "exceljs": "^4.4.0",
+    "xlsx": "^0.18.5"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "tslib"
+      ]
+    },
+    "onlyBuiltDependencies": [
+      "electron"
+    ]
+  },
+  "electron-builder": {
+    "nodeGypRebuild": false
+  }
+}

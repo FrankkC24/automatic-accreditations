@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Acreditaciones automáticas - Banco Santa Fe</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head> 
+<body>
+    <div class="container">
+        <header>
+            <h1>ACREDITACIONES AUTOMÁTICAS</h1>
+        </header>
+        
+        <!-- File Type -->
+        <section class="card">
+            <h2>TIPO DE ACREDITACIÓN (no necesario de cambiar si se importa)</h2>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="fileType" value="mismo" checked>
+                    Mismo banco
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="fileType" value="otros">
+                    Otro banco
+                </label>
+            </div>
+        </section>
+        
+        <!-- Header -->
+        <section class="card">
+            <h2>DATOS DE CABECERA</h2>
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="headerId">ID CABECERA (9998) <span class="campo-obligatorio">*</span></label>
+                    <input type="text" id="headerId" value="9998" maxlength="4" placeholder="9998">
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="companyHeader">Empresa <span class="campo-obligatorio">*</span></label>
+                    <input type="text" id="companyHeader" value="3307" maxlength="4">
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="agreementHeader">Convenio <span class="campo-obligatorio">*</span></label>
+                    <select id="agreementHeader" class="select-agreement">
+                        <option value="0001">0001</option>
+                        <option value="0004">0004</option>
+                        <option value="0029">0029</option>
+                        <option value="other">Otro...</option>
+                    </select>
+                    <div id="customAgreementContainer" class="hidden mt-2">
+                        <input type="text" id="customAgreement" maxlength="4" placeholder="Custom agreement">
+                    </div>
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="accreditationDate">Fecha de acreditación <span class="campo-obligatorio">*</span></label>
+                    <input type="text" id="accreditationDate" maxlength="8" placeholder="AAAAMMDD">
+                    <small>Formato AAAAMMDD - 8 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fileNumber">Número de archivo <span class="campo-obligatorio">*</span></label>
+                    <input type="text" id="fileNumber" maxlength="6">
+                    <small>Numérico - 6 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="observations">Observaciones</label>
+                    <input type="text" id="observations" maxlength="79">
+                    <small>Alfanumérico - 79 caracteres (opcional)</small>
+                </div>
+                
+                <!-- Required fields legend -->
+                <div class="campos-obligatorios-leyenda">
+                    <span class="campo-obligatorio">*</span> Campos requeridos
+                </div>
+            </div>
+        </section>
+        
+        <!-- Import Personnel List -->
+        <section class="card">
+            <h2>IMPORTAR LISTA DE DOCENTES</h2>
+            <p>Importe desde un archivo Excel para generar acreditaciones.</p>
+            
+            <button id="btnImportList" class="btn btn-primary">
+                IMPORTAR LISTA
+            </button>
+        </section>
+        
+        <!-- Personnel List Container -->
+        <section id="personnelContainer" class="card hidden">
+            <h2>LISTA DE PERSONAL</h2>
+            
+            <div class="filters-container">
+                <div class="form-group">
+                    <label for="filterPersonnel">Tipo de acreditación:</label>
+                    <select id="filterPersonnel" class="select-filter">
+                        <option value="todos">Todos</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="bancaria">Acreditación bancaria</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="searchPersonnel">Buscar:</label>
+                    <input type="text" id="searchPersonnel" class="search-input" placeholder="Nombre, legajo o DNI">
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Legajo #</th>
+                            <th>Nombre completo</th>
+                            <th>DNI</th>
+                            <th>Tipo</th>
+                            <th>CBU</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personnelTable"></tbody>
+                </table>
+            </div>
+            
+            <div class="pagination" id="personnelPagination"></div>
+            
+            <button id="btnGenerateAccreditations" class="btn btn-success mt-4">
+                GENERAR ACREDITACIONES
+            </button>
+        </section>
+        
+        <!-- Manual Operation -->
+        <section class="card">
+            <h2>AÑADIR OPERACIÓN MANUALMENTE</h2>
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="company">Empresa</label>
+                    <input type="text" id="company" maxlength="4">
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="system">Sistema</label>
+                    <select id="system">
+                        <option value="00">00 - Cuenta corriente</option>
+                        <option value="01">01 - Caja de ahorros</option>
+                        <option value="66" class="option-mismo">66 - Judicial</option>
+                    </select>
+                    <small>Numérico - 2 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="branchCode">Código de sucursal</label>
+                    <input type="text" id="branchCode" maxlength="4">
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group field-mismo">
+                    <label for="accountNumber">Número de cuenta</label>
+                    <input type="text" id="accountNumber" maxlength="12">
+                    <small>Numérico - 12 caracteres</small>
+                </div>
+                
+                <div class="form-group field-otros hidden">
+                    <label for="cuitCuil">CUIT/CUIL</label>
+                    <input type="text" id="cuitCuil" maxlength="12">
+                    <small>Numérico - 12 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="operationCode">Código de operación</label>
+                    <input type="text" id="operationCode" value="02" maxlength="2" placeholder="02">
+                    <small>Numérico - 2 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">Monto</label>
+                    <input type="text" id="amount" placeholder="0.000">
+                    <small>Numérico - 11 enteros 3 decimales</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="imputationDate">Fecha de imputación</label>
+                    <input type="text" id="imputationDate" maxlength="8" placeholder="YYYYMMDD">
+                    <small>Formato AAAAMMDD - 8 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="receiptNumber">Nro. de comprobante</label>
+                    <input type="text" id="receiptNumber" maxlength="10">
+                    <small>Numérico - 10 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="agreement">Convenio</label>
+                    <input type="text" id="agreement" maxlength="4">
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="affinity">Afinidad</label>
+                    <input type="text" id="affinity" value="9999" maxlength="4" placeholder="9999">
+                    <small>Numérico - 4 caracteres</small>
+                </div>
+                
+                <div class="form-group field-mismo">
+                    <label for="text">Texto</label>
+                    <input type="text" id="text" maxlength="30">
+                    <small>Alfanumérico - 30 caracteres</small>
+                </div>
+                
+                <div class="form-group field-otros hidden">
+                    <label for="cbu">CBU</label>
+                    <input type="text" id="cbu" maxlength="30">
+                    <small>Alfanumérico - 30 caracteres</small>
+                </div>
+            </div>
+            
+            <button id="btnAddOperation" class="btn btn-primary">
+                AÑADIR OPERACIÓN
+            </button>
+        </section>
+        
+        <!-- Operations -->
+        <section id="operationsContainer" class="card hidden">
+            <h2>Operaciones(<span id="operationsCount">0</span>)</h2>
+            
+            <div class="operations-actions">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="selectAllOperations" class="custom-checkbox">
+                    <label for="selectAllOperations">Seleccionar todas</label>
+                </div>
+                <button id="btnDeleteSelected" class="btn btn-danger" disabled>
+                    Eliminar seleccionadas
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="select-column"><span class="sr-only">Seleccionar</span></th>
+                            <th>Empresa</th>
+                            <th>Sistema</th>
+                            <th id="col-account-cuit">Número de cuenta</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                            <th id="col-text-cbu">Texto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="operationsTable"></tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Action Buttons -->
+        <section class="action-buttons">
+            <button id="btnGenerateTxt" class="btn btn-success">
+                GENERAR TXT
+            </button>
+            
+            <button id="btnGenerateExcel" class="btn btn-info">
+                GENERAR EXCEL
+            </button>
+        </section>
+    </div>
+    
+    <div id="notification-container"></div>
+    
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
